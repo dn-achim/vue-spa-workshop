@@ -8,7 +8,19 @@ export const routes: Array<RouteConfig> = [
   },
   {
     path: '/projekte',
-    name: 'project-index',
-    component: () => import(/* webpackChunkName: "project-index" */ '../views/project/list/list.vue')
+    component: () => import(/* webpackChunkName: "layout-empty" */ '../layouts/empty/empty.vue'),
+    children: [
+      {
+        path: '/',
+        name: 'project-index',
+        component: () => import(/* webpackChunkName: "view-project-index" */ '../views/project/list/list.vue')
+      },
+      {
+        path: ':uuid/detail',
+        name: 'project-detail',
+        component: () => import(/* webpackChunkName: "view-project-detail" */ '../views/project/detail/detail.vue'),
+        props: true
+      }
+    ]
   }
 ]
