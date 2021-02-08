@@ -22,5 +22,15 @@ export const routes: Array<RouteConfig> = [
         props: true
       }
     ]
+  },
+  {
+    path: '/error',
+    alias: '*',
+    name: 'error',
+    component: () => import(/* webpackChunkName: "view-error" */ '../views/error/error.vue'),
+    props: (route) => ({
+      errorCode: route.params.errorCode || 404,
+      errorMessage: route.params.errorMessage || 'Seite konnte nicht gefunden werden!'
+    })
   }
 ]
