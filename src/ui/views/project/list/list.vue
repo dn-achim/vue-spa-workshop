@@ -7,17 +7,33 @@
         </h1>
       </v-col>
     </v-row>
+    <project-list
+      :projects="filtered"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Component } from 'vue-property-decorator'
+import { mixins } from 'vue-class-component'
+import { ProjectSearchMixin } from '@/ui/mixins'
+import { ProjectList } from '@/ui/components'
+import { ProjectInterface } from '@/entities'
 
 @Component({
+  components: {
+    ProjectList
+  },
   metaInfo: {
     title: 'Projekte'
   }
 })
-export default class ProjectListView extends Vue {
+export default class ProjectListView extends mixins(ProjectSearchMixin) {
+  get filtered (): ProjectInterface[] {
+    return this
+      .projectSearch
+      .filter('')
+      .map(elem => elem.item)
+  }
 }
 </script>
