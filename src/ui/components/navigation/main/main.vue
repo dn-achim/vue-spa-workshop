@@ -26,6 +26,11 @@
         >
           Home
         </v-tab>
+        <v-tab
+          :to="{ name: 'project-index' }"
+        >
+          Projekte
+        </v-tab>
       </v-tabs>
     </template>
   </v-app-bar>
