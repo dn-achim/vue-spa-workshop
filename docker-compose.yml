@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  frontend:
+    container_name: hwa_demo
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    restart: always
+    networks:
+      - webservices
+    security_opt:
+      - apparmor:unconfined
+    labels:
+      - "traefik.docker.network=webservices"
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:demo.hwa.digitalnoise.me"
+      - "traefik.port=80"
+      - "traefik.protocol=http"
+      - "traefik.frontend.auth.basic=hamburg:$$apr1$$59v9G00q$$9KHFc5Rl5tFhqD4kdjBuR."
+      - "traefik.frontend.auth.basic.removeHeader=true"
+
+networks:
+  webservices:
+    external: true
