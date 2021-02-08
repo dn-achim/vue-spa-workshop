@@ -22,7 +22,7 @@
         class="pl-14"
       >
         <v-tab
-          :to="{name: 'Home'}"
+          :to="{name: 'home'}"
         >
           Home
         </v-tab>
