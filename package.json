@@ -13,6 +13,7 @@
     "@mdi/font": "^5.9.55",
     "core-js": "^3.6.5",
     "fuse.js": "^6.4.6",
+    "portal-vue": "^2.1.7",
     "reflect-metadata": "^0.1.13",
     "roboto-fontface": "^0.10.0",
     "vue": "^2.6.11",

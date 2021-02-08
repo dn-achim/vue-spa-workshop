@@ -7,9 +7,21 @@
         </h1>
       </v-col>
     </v-row>
+
     <project-list
       :projects="filtered"
     />
+
+    <portal to="searchbar">
+      <v-text-field
+        v-model="phrase"
+        hide-details
+        single-line
+        append-outer-icon="mdi-magnify"
+        placeholder="In Projekten suchen"
+      />
+    </portal>
+
     <project-overlay />
   </div>
 </template>
@@ -31,10 +43,12 @@ import { ProjectInterface } from '@/entities'
   }
 })
 export default class ProjectListView extends mixins(ProjectSearchMixin) {
+  phrase = ''
+
   get filtered (): ProjectInterface[] {
     return this
       .projectSearch
-      .filter('')
+      .filter(this.phrase)
       .map(elem => elem.item)
   }
 }

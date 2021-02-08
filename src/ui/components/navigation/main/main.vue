@@ -20,6 +20,7 @@
     <template v-slot:extension>
       <v-tabs
         class="pl-14"
+        style="flex-basis: 70%"
       >
         <v-tab
           :to="{name: 'home'}"
@@ -32,6 +33,9 @@
           Projekte
         </v-tab>
       </v-tabs>
+      <div style="flex-basis: 30%">
+        <portal-target name="searchbar"></portal-target>
+      </div>
     </template>
   </v-app-bar>
 </template>
