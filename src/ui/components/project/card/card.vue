@@ -26,6 +26,15 @@
     <v-divider />
 
     <v-card-actions class="pl-3">
+      <v-btn
+        small
+        depressed
+        outlined
+        color="primary"
+        :to="{ name: 'project-detail', params: { uuid: project.uuid }}"
+      >
+        Detailseite
+      </v-btn>
       <v-spacer />
       <project-status
         :project="project"
