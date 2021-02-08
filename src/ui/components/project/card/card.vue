@@ -30,6 +30,15 @@
         small
         depressed
         outlined
+        @click="detail"
+        color="primary"
+      >
+        Mehr Infos
+      </v-btn>
+      <v-btn
+        small
+        depressed
+        outlined
         color="primary"
         :to="{ name: 'project-detail', params: { uuid: project.uuid }}"
       >
@@ -48,6 +57,8 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { ProjectInterface } from '@/entities'
 import { ProjectStatus } from '../status'
+import { MutationTypes } from '@/ui/store/mutations'
+import { Mutation } from 'vuex-class'
 
 @Component({
   components: {
@@ -56,6 +67,9 @@ import { ProjectStatus } from '../status'
 })
 export default class ProjectCard extends Vue {
   @Prop({ required: true }) readonly project!: ProjectInterface
+
+  @Mutation(MutationTypes.SHOW) setShow!: (payload: boolean) => void
+  @Mutation(MutationTypes.PROJECT) setProject!: (payload: ProjectInterface) => void
 
   get description (): string {
     const length = 100
@@ -71,6 +85,11 @@ export default class ProjectCard extends Vue {
         '...'
       ]
       : this.project.ansprechpartner
+  }
+
+  detail () {
+    this.setProject(this.project)
+    this.setShow(true)
   }
 }
 </script>

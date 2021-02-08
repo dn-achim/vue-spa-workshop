@@ -10,6 +10,7 @@
     <project-list
       :projects="filtered"
     />
+    <project-overlay />
   </div>
 </template>
 
@@ -17,12 +18,13 @@
 import { Component } from 'vue-property-decorator'
 import { mixins } from 'vue-class-component'
 import { ProjectSearchMixin } from '@/ui/mixins'
-import { ProjectList } from '@/ui/components'
+import { ProjectList, ProjectOverlay } from '@/ui/components'
 import { ProjectInterface } from '@/entities'
 
 @Component({
   components: {
-    ProjectList
+    ProjectList,
+    ProjectOverlay
   },
   metaInfo: {
     title: 'Projekte'
