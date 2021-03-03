@@ -1,7 +1,14 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-card v-if="project">
+
+      <project-loading
+        v-if="loading"
+      />
+
+      <v-card
+        v-if="project"
+      >
         <v-card-title>
           <h1>{{ project.titel }}</h1>
         </v-card-title>
@@ -68,17 +75,23 @@
 </template>
 
 <script lang="ts">
-import { ProjectInterface } from '@/entities'
 import { Component, Prop } from 'vue-property-decorator'
 import { mixins } from 'vue-class-component'
-import { ProjectRepositoryMixin } from '@/ui/mixins'
-import { ProjectDetailCarousel, ProjectDetailIntro, ProjectDetailTimeline } from '@/ui/components'
+import { ProjectRestClientMixin } from '@/ui/mixins'
+import {
+  ProjectLoading,
+  ProjectDetailCarousel,
+  ProjectDetailIntro,
+  ProjectDetailTimeline
+} from '@/ui/components'
+import { ProjectInterface } from '@/entities'
 
 @Component<ProjectDetailView>({
   components: {
     ProjectDetailCarousel,
     ProjectDetailIntro,
-    ProjectDetailTimeline
+    ProjectDetailTimeline,
+    ProjectLoading
   },
   metaInfo () {
     return {
@@ -86,24 +99,35 @@ import { ProjectDetailCarousel, ProjectDetailIntro, ProjectDetailTimeline } from
     }
   }
 })
-export default class ProjectDetailView extends mixins(ProjectRepositoryMixin) {
+export default class ProjectDetailView extends mixins(ProjectRestClientMixin) {
   @Prop({ default: null }) readonly uuid!: string | null
 
-  get project (): ProjectInterface | undefined {
-    return this.uuid
-      ? this.projectRepository.getOne(this.uuid)
-      : undefined
+  project: ProjectInterface|null = null
+  loading = false
+
+  async mounted () {
+    try {
+      this.loading = true
+      this.project = await this.projectRestClient.getOne(this.uuid)
+      if (this.project === undefined) {
+        this.handleError(`Das Projekt [${this.uuid || 'n/a'}] konnte leider nicht gefunden werden`)
+      }
+    } catch (error) {
+      this.project = null
+      console.err('Dude? 😝')
+      this.handleError()
+    } finally {
+      this.loading = false
+    }
   }
 
-  mounted () {
-    if (this.project === undefined) {
-      this.$router.push({
-        name: 'error',
-        params: {
-          errorMessage: `Das Projekt [${this.uuid || 'n/a'}] konnte leider nicht gefunden werden`
-        }
-      })
-    }
+  handleError (errorMessage?: string) {
+    this.$router.push({
+      name: 'error',
+      params: {
+        errorMessage
+      }
+    })
   }
 }
 </script>

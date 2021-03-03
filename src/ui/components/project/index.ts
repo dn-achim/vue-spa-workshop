@@ -1,5 +1,6 @@
 export * from './card'
 export * from './detail'
 export * from './list'
+export * from './loading'
 export * from './overlay'
 export * from './status'

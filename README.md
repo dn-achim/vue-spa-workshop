@@ -3,6 +3,7 @@
 ## Project setup
 ```
 yarn install
+yarn global add json-server concurrently
 ```
 
 ### Compiles and hot-reloads for development

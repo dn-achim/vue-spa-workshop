@@ -8,7 +8,11 @@
       </v-col>
     </v-row>
 
+    <project-loading
+      v-if="loading"
+    />
     <project-list
+      v-else
       :projects="filtered"
     />
 
@@ -27,29 +31,48 @@
 </template>
 
 <script lang="ts">
-import { Component } from 'vue-property-decorator'
+import { Component, Watch } from 'vue-property-decorator'
+import { Debounce } from 'vue-debounce-decorator'
 import { mixins } from 'vue-class-component'
-import { ProjectSearchMixin } from '@/ui/mixins'
-import { ProjectList, ProjectOverlay } from '@/ui/components'
+import { ProjectRestClientMixin } from '@/ui/mixins'
+import { ProjectList, ProjectLoading, ProjectOverlay } from '@/ui/components'
 import { ProjectInterface } from '@/entities'
 
 @Component({
   components: {
     ProjectList,
+    ProjectLoading,
     ProjectOverlay
   },
   metaInfo: {
     title: 'Projekte'
   }
 })
-export default class ProjectListView extends mixins(ProjectSearchMixin) {
+export default class ProjectListView extends mixins(ProjectRestClientMixin) {
   phrase = ''
+  loading = false
+  filtered: ProjectInterface[] = []
 
-  get filtered (): ProjectInterface[] {
-    return this
-      .projectSearch
-      .filter(this.phrase)
-      .map(elem => elem.item)
+  @Watch('phrase')
+  @Debounce(500)
+  async onChangePhrase (value: string) {
+    this.filtered = await this.filter(value)
+  }
+
+  async filter (token: string): ProjectInterface[] {
+    try {
+      this.loading = true
+      return await this.projectRestClient.filter(token)
+    } catch (error) {
+      console.error('Dude? 🤨')
+      return []
+    } finally {
+      this.loading = false
+    }
+  }
+
+  async mounted () {
+    this.filtered = await this.filter('')
   }
 }
 </script>
